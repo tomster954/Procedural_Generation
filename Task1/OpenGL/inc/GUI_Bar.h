@@ -23,6 +23,7 @@ public:
 	void StartUp(GLFWwindow *_pWindow);
 	void Draw();
 
+
 	glm::vec3 GetLightDir()	{ return -m_light; };
 	glm::vec3 GetLightCol() { return m_lightColour; }
 
@@ -81,7 +82,7 @@ private:
 
 	float m_specPower;
 	float m_cameraSpeed;
-
+	void* clientdata;
 	//Particles
 	//------------------------------------
 	unsigned int m_maxParticles;

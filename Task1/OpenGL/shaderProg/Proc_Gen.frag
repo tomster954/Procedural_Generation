@@ -16,6 +16,7 @@ void main()
 { 
 	float height = texture(perlin_texture, frag_texcoord).r;
 	
+	//Setting the textures based of the height of the map
 	if (height < 0.3f)
 		out_color = texture(water_texture, vec2(frag_texcoord.x * 10, frag_texcoord.y * 10)).rgba;
 	else if (height > 0.4f && height < 0.5)

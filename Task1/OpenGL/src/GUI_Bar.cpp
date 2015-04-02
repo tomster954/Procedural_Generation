@@ -13,6 +13,7 @@ GUI_Bar::~GUI_Bar()
 	TwTerminate();
 }
 
+
 void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 {
 	m_clearColour = glm::vec4(1, 1, 1, 1);
@@ -23,17 +24,17 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 
 	//Particles
 	//------------------------------------
-	m_lifespanMin	= 1.0f;
-	m_lifespanMax	= 5.0f;
+	m_lifespanMin	= 0.5f;
+	m_lifespanMax	= 1.0f;
 	m_velocityMin	= 10.0f;
 	m_velocityMax	= 20.0f;
-	m_startSize		= 5.0f;
-	m_endSize		= 10.0f;
+	m_startSize		= 1.0f;
+	m_endSize		= 2.0f;
 	
-	m_startColour	= glm::vec4 (1, 0, 0, 1);
+	m_startColour	= glm::vec4 (1, 1, 0, 1);
 	m_endColour		= glm::vec4 (1, 0, 0, 1);
 
-	m_maxParticles = 0;
+	m_maxParticles = 5;
 	//------------------------------------
 
 	TwInit(TW_OPENGL_CORE, nullptr);
@@ -47,7 +48,9 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	glfwSetWindowSizeCallback(_pWindow, OnWindowResize);
 
 	m_bar = TwNewBar("my bar");
-	
+
+	TwAddButton(m_bar, "Run", NULL, NULL, " label='Press 'R' to regenerate terrain' ");
+
 	TwAddVarRW(m_bar, "light colour",
 	TW_TYPE_COLOR3F, &m_lightColour[0], "group=Scene");
 

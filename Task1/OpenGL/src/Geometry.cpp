@@ -40,7 +40,7 @@ void Geometry::StartUp()
 {
 	m_Camera = nullptr;
 
-	m_terrain = new ProcGen(300, 300);
+	m_terrain = new ProcGen(300, 300, m_pWindow);
 
 	//m_postProcessingEffects = new PostProcessing();
 	m_mirror = new RenderTargets();
@@ -68,6 +68,7 @@ void Geometry::StartUp()
 void Geometry::Update(float _dt)
 {
 	m_fbx->Update(_dt);
+	m_terrain->Update(_dt);
 
 	if (m_Camera != nullptr)
 		m_particleEmitter->Update(_dt, m_Camera->GetTransform());

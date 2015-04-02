@@ -10,6 +10,7 @@
 #include <glm/ext.hpp>
 
 class Camera;
+struct GLFWwindow;
 
 struct ProcGenVertex 
 {
@@ -21,7 +22,7 @@ struct ProcGenVertex
 class ProcGen
 {
 public:
-	ProcGen(unsigned int _rows, unsigned int _cols );
+	ProcGen(unsigned int _rows, unsigned int _cols, GLFWwindow *_pWindow );
 	~ProcGen();
 
 	void StartUp();
@@ -30,6 +31,7 @@ public:
 
 	void GenerateNoise();
 
+	void Update(float _dt);
 	void Draw(Camera* _pCamera);
 
 	void LoadTextures();
@@ -53,7 +55,7 @@ private:
 	unsigned int m_waterTexture;
 	unsigned int m_snowTexture;
 
-
+	GLFWwindow *m_pWindow;
 };
 
 

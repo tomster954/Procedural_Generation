@@ -7,8 +7,9 @@
 #include "ShaderLoader.h"
 #include "Camera.h"
 #include <stb-master/stb_image.h>
-ProcGen::ProcGen(unsigned int _rows, unsigned int _cols)
+ProcGen::ProcGen(unsigned int _rows, unsigned int _cols, GLFWwindow *_pWindow)
 {
+	m_pWindow = _pWindow;
 	m_rows = _rows;
 	m_cols = _cols;
 
@@ -30,6 +31,7 @@ void ProcGen::StartUp()
 void ProcGen::GenerateGrid( unsigned int rows, unsigned int cols )
 {
 	ProcGenVertex* aoVertices = new ProcGenVertex[ rows * cols ];
+
 	for ( unsigned int r = 0 ; r < rows ; ++r ) 
 	{
 		for ( unsigned int c = 0 ; c < cols ; ++c ) 
@@ -115,6 +117,14 @@ void ProcGen::CreateShaders()
 	glDeleteShader(vertexShader);
 }
 
+void ProcGen::Update(float _dt)
+{
+	if(m_pWindow != nullptr && glfwGetKey(m_pWindow, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		GenerateNoise();
+	}
+}
+
 void ProcGen::GenerateNoise()
 {
 	int dims = m_rows;
@@ -134,7 +144,7 @@ void ProcGen::GenerateNoise()
 			{
 				float freq = powf(2, (float)o);
 				float perlin_sample =
-				glm::perlin(glm::vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
+				glm::perlin(glm::vec3((float)x, (float)y, (float)glfwGetTime()) * scale * freq) * 0.5f + 0.5f;
 				perlin_data[y * dims + x] += perlin_sample * amplitude;
 				amplitude *= persistence;
 			} 

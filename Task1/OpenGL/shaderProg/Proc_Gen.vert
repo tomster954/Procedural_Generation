@@ -23,7 +23,13 @@ void main()
 		pos.y = waterLevel * scale;
 	else
 		pos.y += texture(perlin_texture, texcoord).r * scale;
-
+		
+	//Puts the map on 0 on the Y
+	pos.y -= waterLevel * scale;
+	
+	//Moves the map to 0, 0, 0
+	pos = pos + vec4(-150, 0, -150, 0);
+	
 	frag_texcoord = texcoord;
 	gl_Position = ProjectionView * pos; 
 }
