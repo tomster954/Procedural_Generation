@@ -1,0 +1,14 @@
+Status: done
+
+Doing:
+
+contains:
+ - GUI
+ - FBX loader
+ - Animations
+ - CPU particles
+ - GPU particles
+ - render Targets
+ - Post-Processing
+ - ShaderLoader
+ - procedural gen with textures
