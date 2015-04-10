@@ -27,7 +27,7 @@ void main()
 	//Puts the map on 0 on the Y
 	pos.y -= waterLevel * scale;
 	
-	//Moves the map to 0, 0, 0
+	//Moves the middle of the map to 0, y, 0
 	pos = pos + vec4(-150, 0, -150, 0);
 	
 	frag_texcoord = texcoord;
