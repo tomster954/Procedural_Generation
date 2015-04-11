@@ -30,10 +30,13 @@ Geometry::~Geometry()
 	delete m_GPUParticleEmitter;
 	delete m_myBar;
 	delete m_particlesBar;
-	delete m_fbx;
+	
 	delete m_mirror;
 	delete m_postProcessingEffects;
 	delete m_terrain;
+
+	delete m_Pyro;
+	delete m_other;
 }
 
 void Geometry::StartUp()
@@ -62,12 +65,17 @@ void Geometry::StartUp()
 	m_GPUParticleEmitter->initalise(100000, 0.1f, 5.0f, 5, 20, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 	//------------------------------------
 
-	m_fbx = new FBX_Loader("./data/characters/Pyro/pyro.fbx");
+	m_Pyro = new FBX_Loader("./data/characters/Pyro/pyro.fbx");
+	
+	m_other = new FBX_Loader("./data/characters/Marksman/Marksman.fbx");
+
 }
 
 void Geometry::Update(float _dt)
 {
-	m_fbx->Update(_dt);
+	m_Pyro->Update(_dt);
+	m_other->Update(_dt);
+
 	m_terrain->Update(_dt);
 
 	if (m_Camera != nullptr)
@@ -135,11 +143,20 @@ void Geometry::DrawFBXModles(Camera *_pCamera)
 {
 	//Drawing the pyro
 	//---------------------------------
-	m_fbx->Draw(m_Camera);
-	m_fbx->SetLightDir(m_myBar->GetLightDir());
-	m_fbx->SetLightColour(m_myBar->GetLightCol());
-	m_fbx->SetSecPower(m_myBar->GetSpecPower());
+		m_Pyro->Draw(m_Camera);
+		m_Pyro->SetLightDir(m_myBar->GetLightDir());
+		m_Pyro->SetLightColour(m_myBar->GetLightCol());
+		m_Pyro->SetSecPower(m_myBar->GetSpecPower());
 	//---------------------------------
+	
+	//Drawing the pyro
+	//---------------------------------
+		m_other->Draw(m_Camera);
+		m_other->SetLightDir(m_myBar->GetLightDir());
+		m_other->SetLightColour(m_myBar->GetLightCol());
+		m_other->SetSecPower(m_myBar->GetSpecPower());
+	//---------------------------------
+
 }
 
 void Geometry::DrawTerrain(Camera *_pCamera)

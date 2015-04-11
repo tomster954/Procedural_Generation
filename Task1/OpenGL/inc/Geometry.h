@@ -43,7 +43,8 @@ private:
 
 	ProcGen* m_terrain;
 
-	FBX_Loader* m_fbx;
+	FBX_Loader* m_Pyro;
+	FBX_Loader* m_other;
 
 	ParticleEmitter* m_particleEmitter;
 

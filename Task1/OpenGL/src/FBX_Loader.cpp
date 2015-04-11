@@ -33,7 +33,8 @@ FBX_Loader::~FBX_Loader()
 
 void FBX_Loader::StartUp(const char* _FBX_FileName)
 {
-	m_position = glm::vec4(0, 50, 0, 0);
+	//m_position =  new s_Transform();
+	//m_position->trans = glm::vec4(0, 50, 0, 0);
 
 	m_lightCol = glm::vec3(1, 1, 1);
 	m_lightDir = glm::vec3(0, 1, 0);
@@ -83,6 +84,13 @@ void FBX_Loader::Draw(Camera* pCamera)
 	// bind the camera
 	int loc = glGetUniformLocation(m_programID, "ProjectionView");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &(pCamera->GetProjectionView()[0][0]));
+	
+	glm::vec4 trans = glm::vec4(0, 100, 0, 0);
+	
+	//GLfloat* c = new GLfloat[4];
+
+	loc = glGetUniformLocation(m_programID, "myTransform");
+	glUniform4fv (loc, 1, glm::value_ptr(trans));
 
 	// set texture slot
 	glActiveTexture(GL_TEXTURE0);
@@ -111,10 +119,6 @@ void FBX_Loader::Draw(Camera* pCamera)
 		//set light colour
 		unsigned int lightColour = glGetUniformLocation(m_programID, "LightColour");
 		glUniform3f(lightColour, m_lightCol.x, m_lightCol.y, m_lightCol.z);
-
-		//set position
-		//unsigned int position = glGetUniformLocation(m_programID, "Position");
-		//glUniform3f(position, m_position.x, m_position.y, m_position.z);
 
 		//set camera pos
 		unsigned int cameraPosLocation = glGetUniformLocation(m_programID, "CameraPos");
@@ -197,7 +201,7 @@ void FBX_Loader::createOpenGLBuffers(FBXFile* fbx)
 		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex),	(void*)FBXVertex::WeightsOffset);
 		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex),	(void*)FBXVertex::IndicesOffset);
 		
-		//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(m_position),	0);
+		//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex),	(void*)FBXVertex::TransformOffset);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -5,9 +5,7 @@ layout(location=1) in vec4 Normal;
 layout(location=2) in vec4 tangent;					
 layout(location=3) in vec2 texcoord;				
 layout(location=4) in vec4 weights;					
-layout(location=5) in vec4 indices;		
-		
-layout(location=6) in vec4 leltransform;
+layout(location=5) in vec4 indices;
 
 out vec3 frag_normal;								
 out vec3 frag_position;								
@@ -17,7 +15,8 @@ out vec2 frag_texcoord;
 
 const int MAX_BONES = 128;							
 							
-uniform mat4 ProjectionView;						
+uniform mat4 ProjectionView;			
+uniform vec4 myTransform;			
 uniform mat4 global;
 uniform mat4 bones[MAX_BONES];						
 
@@ -47,5 +46,5 @@ void main()
 	P += bones[ index.w ] * Position * weights.w;	
 	P.w = 1;										
 	
-	gl_Position = ProjectionView * (global * (P * FBX_Scale) + transform);		
+	gl_Position = ProjectionView * (global * (P * FBX_Scale) + myTransform);		
 };
