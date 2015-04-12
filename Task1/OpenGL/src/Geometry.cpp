@@ -62,13 +62,14 @@ void Geometry::StartUp()
 	//GPU Particles
 	//------------------------------------
 	m_GPUParticleEmitter = new GPUParticleEmitter();
-	m_GPUParticleEmitter->initalise(100000, 0.1f, 5.0f, 5, 20, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
+	m_GPUParticleEmitter->initalise(100000, 10.0f, 60.0f, 30, 40, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 	//------------------------------------
 
 	m_Pyro = new FBX_Loader("./data/characters/Pyro/pyro.fbx");
+	m_Pyro->SetPosition(glm::vec4(-5, 38.4, 0, 0));
 	
 	m_other = new FBX_Loader("./data/characters/Marksman/Marksman.fbx");
-
+	m_other->SetPosition(glm::vec4(5, 38.5, 0, 0));
 }
 
 void Geometry::Update(float _dt)
@@ -97,7 +98,7 @@ void Geometry::Draw(Camera *_pCamera)
 	DrawFBXModles(_pCamera);
 
 	// Drawing and setting CPUparticles
-	DrawCPUParticles(_pCamera);
+	//DrawCPUParticles(_pCamera);
 
 	// drawing GPUparticles
 	DrawGPUParticles(_pCamera);
@@ -122,8 +123,8 @@ void Geometry::DrawCPUParticles(Camera *_pCamera)
 	m_particleEmitter->SetLifeSpanMin(m_myBar->GetLifeSpanMin());
 	m_particleEmitter->SetLifeSpanMax(m_myBar->GetLifeSpanMax());
 
-	m_particleEmitter->SetVelocityMin(m_myBar->GetVelocityMin());
-	m_particleEmitter->SetVelocityMax(m_myBar->GetVelocityMax());
+	m_particleEmitter->SetVelocityMin(m_myBar->GetSpeedMin());
+	m_particleEmitter->SetVelocityMax(m_myBar->GetSpeedMax());
 
 	m_particleEmitter->SetStartSize(m_myBar->GetStartSize());
 	m_particleEmitter->SetEndSize(m_myBar->GetEndSize()) ;
@@ -137,6 +138,20 @@ void Geometry::DrawCPUParticles(Camera *_pCamera)
 void Geometry::DrawGPUParticles(Camera *_pCamera)
 {
 	m_GPUParticleEmitter->Draw((float)glfwGetTime(), m_Camera->GetTransform(), m_Camera->GetProjectionView());
+
+	m_GPUParticleEmitter->SetLifeSpanMin(m_myBar->GetLifeSpanMin());
+	m_GPUParticleEmitter->SetLifeSpanMax(m_myBar->GetLifeSpanMax());
+
+	m_GPUParticleEmitter->SetSpeedMin(m_myBar->GetSpeedMin());
+	m_GPUParticleEmitter->SetSpeedMax(m_myBar->GetSpeedMax());
+
+	m_GPUParticleEmitter->SetStartSize(m_myBar->GetStartSize());
+	m_GPUParticleEmitter->SetEndSize(m_myBar->GetEndSize()) ;
+
+	m_GPUParticleEmitter->SetMaxParticles(m_myBar->GetMaxParticles());
+
+	m_GPUParticleEmitter->SetStartColour(m_myBar->GetStartColour());
+	m_GPUParticleEmitter->SetEndColour(m_myBar->GetEndColour()) ;
 }
 
 void Geometry::DrawFBXModles(Camera *_pCamera)

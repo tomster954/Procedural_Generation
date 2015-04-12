@@ -39,7 +39,24 @@ public:
 	//loads shader program
 	unsigned int loadShader(unsigned int type, const char* path);
 
+	//Setters using the gui
+	void SetLifeSpanMin(float _minLifeSpan ){ m_lifespanMin = _minLifeSpan; }
+	void SetLifeSpanMax(float _maxLifeSpan ){ m_lifespanMax = _maxLifeSpan; }
+						 
+	void SetSpeedMin(float _minSpeed ){ m_speedMin = _minSpeed; }
+	void SetSpeedMax(float _maxSpeed ){ m_speedMax = _maxSpeed; }
+
+	void SetStartSize( float _startSize ) { m_startSize = _startSize; }
+	void SetEndSize(float _endSize ) { m_endSize = _endSize;}
+
+	void SetMaxParticles(unsigned int _maxParticles) { m_maxParticles = _maxParticles; }
+
+	void SetStartColour(glm::vec4 _startColour) { m_startColour = _startColour; }
+	void SetEndColour(glm::vec4 _endColour ) { m_endColour = _endColour; }
+
+
 private:
+	int RangedRandDemo( int range_min, int range_max);
 
 protected:
 	void createBuffers();
@@ -57,6 +74,9 @@ protected:
 
 	float m_velocityMin;
 	float m_velocityMax;
+
+	float m_speedMin;
+	float m_speedMax;
 
 	float m_startSize;
 	float m_endSize;

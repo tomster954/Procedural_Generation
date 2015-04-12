@@ -12,8 +12,15 @@ out float lifespan;
 
 uniform float time;
 uniform float deltaTime;
+
 uniform float lifeMin;
 uniform float lifeMax;
+
+uniform float speedMin;
+uniform float speedMax;
+
+float currSpeed;
+
 uniform vec3 emitterPosition;
 
 const float INVERSE_MAX_UINT = 1.0f / 4294967295.0f;
@@ -29,18 +36,27 @@ float rand(uint seed, float range)
 
 void main() 
 {
-	position = Position + Velocity * deltaTime;
+	//currSpeed = rand(deltaTime, speedMax - speedMin) + speedMin;
+	
+	position = Position + Velocity *  speedMin * deltaTime;
 	velocity = Velocity;
 	lifetime = Lifetime + deltaTime;
 	lifespan = Lifespan;
+	
 	// emit a new particle as soon as it dies
 	if (lifetime > lifespan) 
 	{
 		uint seed = uint(time * 1000.0) + uint(gl_VertexID);
-		velocity.x = rand(seed++, 2) - 1;
-		velocity.y = rand(seed++, 2) - 1;
-		velocity.z = rand(seed++, 2) - 1;
+		//velocity.x =   - 1;
+		//velocity.y = rand(seed++, 2) - 1;
+		//velocity.z = rand(seed++, 2) - 1;
+		
+		velocity.x = -1;
+		velocity.y = -1;
+		velocity.z = 0;
+		
 		velocity = normalize(velocity);
+		
 		position = emitterPosition;
 		lifetime = 0;
 		lifespan = rand(seed++, lifeMax - lifeMin) + lifeMin;

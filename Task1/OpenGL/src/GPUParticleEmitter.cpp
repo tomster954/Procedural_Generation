@@ -7,7 +7,7 @@
 
 GPUParticleEmitter::GPUParticleEmitter()
 	: m_particles(nullptr), m_maxParticles(0),
-	m_position(0, 0, 0),
+	m_position(0, 100, 0),
 	m_drawShader(0),
 	m_updateShader(0),
 	m_lastDrawTime(0) 
@@ -45,6 +45,9 @@ void GPUParticleEmitter::initalise(unsigned int a_maxParticles,
 	m_lifespanMax = a_lifetimeMax;
 	m_maxParticles = a_maxParticles;
 
+	m_speedMax = 10;
+	m_speedMin = 5;
+
 	// create particle array
 	m_particles = new GPUParticle[a_maxParticles];
 
@@ -63,40 +66,33 @@ void GPUParticleEmitter::createBuffers()
 	// create opengl buffers
 	glGenVertexArrays(2, m_vao);
 	glGenBuffers(2, m_vbo);
+	
 	// setup the first buffer
 	glBindVertexArray(m_vao[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles *
-		sizeof(GPUParticle), m_particles, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * sizeof(GPUParticle), m_particles, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(0); // position
 	glEnableVertexAttribArray(1); // velocity
 	glEnableVertexAttribArray(2); // lifetime
 	glEnableVertexAttribArray(3); // lifespan
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 12);
-	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 24);
-	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 28);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GPUParticle), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GPUParticle), ((char*)0) + 12);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,	sizeof(GPUParticle), ((char*)0) + 24);
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE,	sizeof(GPUParticle), ((char*)0) + 28);
+	
 	// setup the second buffer
 	glBindVertexArray(m_vao[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles *
-		sizeof(GPUParticle), 0, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * sizeof(GPUParticle), 0, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(0); // position
 	glEnableVertexAttribArray(1); // velocity
 	glEnableVertexAttribArray(2); // lifetime
 	glEnableVertexAttribArray(3); // lifespan
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 12);
-	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 24);
-	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE,
-		sizeof(GPUParticle), ((char*)0) + 28);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GPUParticle), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,	sizeof(GPUParticle), ((char*)0) + 12);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,	sizeof(GPUParticle), ((char*)0) + 24);
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE,	sizeof(GPUParticle), ((char*)0) + 28);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -158,27 +154,71 @@ void GPUParticleEmitter::createUpdateShader()
 	glUniform1f(location, m_lifespanMin);
 	location = glGetUniformLocation(m_updateShader, "lifeMax");
 	glUniform1f(location, m_lifespanMax);
+
+	//bind the emitter's min and max speed
+	location = glGetUniformLocation(m_updateShader, "speedMin");
+	glUniform1f(location, m_speedMin);
+	location = glGetUniformLocation(m_updateShader, "speedMax");
+	glUniform1f(location, m_speedMax);
 }
 
 
 void GPUParticleEmitter::Draw(float time, const glm::mat4& a_cameraTransform, const glm::mat4& a_projectionView)
 {
-	// update the particles using transform feedback
-	glUseProgram(m_updateShader);
-
-	// bind time information
-	int location = glGetUniformLocation(m_updateShader, "time");
-	glUniform1f(location, time);
-
+	//calulate dt
 	float deltaTime = time - m_lastDrawTime; m_lastDrawTime = time;
 
-	location = glGetUniformLocation(m_updateShader, "deltaTime");
-	glUniform1f(location, deltaTime);
+	//using Prog m_updateShader
+	//----------------------------------------------------------------------------
+		glUseProgram(m_drawShader);
 
-	// bind emitter's position
-	location = glGetUniformLocation(m_updateShader, "emitterPosition");
+		// bind size information for interpolation that won’t change
+		int location = glGetUniformLocation(m_drawShader, "sizeStart");
+		glUniform1f(location, m_startSize);
+		location = glGetUniformLocation(m_drawShader, "sizeEnd");
+		glUniform1f(location, m_endSize);
 
-	glUniform3fv(location, 1, &m_position[0]);
+		// bind colour information for interpolation that wont change
+		location = glGetUniformLocation(m_drawShader, "colourStart");
+		glUniform4fv(location, 1, &m_startColour[0]);
+		location = glGetUniformLocation(m_drawShader, "colourEnd");
+		glUniform4fv(location, 1, &m_endColour[0]);
+	//----------------------------------------------------------------------------
+
+	//using Prog m_updateShader
+	//----------------------------------------------------------------------------
+		glUseProgram(m_updateShader);
+		// bind time information
+		location = glGetUniformLocation(m_updateShader, "time");
+		glUniform1f(location, time);
+
+		//randomise the position of the particle
+		int rand = RangedRandDemo(-150, 150);
+		m_position.x = rand;
+		rand = RangedRandDemo(-150, 150);
+		m_position.z = rand;
+
+		// bind emitter's position
+		location = glGetUniformLocation(m_updateShader, "emitterPosition");
+		glUniform3fv(location, 1, &m_position[0]);
+
+		//bind the emitter's dt
+		location = glGetUniformLocation(m_updateShader, "deltaTime");
+		glUniform1f(location, deltaTime);
+
+		//bind the emitter's max and min life	
+		location = glGetUniformLocation(m_updateShader, "lifeMin");
+		glUniform1f(location, m_lifespanMin);
+		location = glGetUniformLocation(m_updateShader, "lifeMax");
+		glUniform1f(location, m_lifespanMax);
+
+		//bind the emitter's min and max speed
+		location = glGetUniformLocation(m_updateShader, "speedMin");
+		glUniform1f(location, m_speedMin);
+		location = glGetUniformLocation(m_updateShader, "speedMax");
+		glUniform1f(location, m_speedMax);
+
+	//----------------------------------------------------------------------------
 
 	// disable rasterisation
 	glEnable(GL_RASTERIZER_DISCARD);
@@ -241,4 +281,12 @@ unsigned int GPUParticleEmitter::loadShader(unsigned int type, const char* path)
 	delete[] source;
 
 	return shader;
+}
+
+int GPUParticleEmitter::RangedRandDemo( int range_min, int range_max)
+{
+   int u;
+   u = (double)rand() / (RAND_MAX + 1) * (range_max - range_min) + range_min;
+
+   return u;
 }

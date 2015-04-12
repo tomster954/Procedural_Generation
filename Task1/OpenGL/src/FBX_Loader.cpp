@@ -33,8 +33,7 @@ FBX_Loader::~FBX_Loader()
 
 void FBX_Loader::StartUp(const char* _FBX_FileName)
 {
-	//m_position =  new s_Transform();
-	//m_position->trans = glm::vec4(0, 50, 0, 0);
+	m_position = glm::vec4(0, 0, 0, 0);
 
 	m_lightCol = glm::vec3(1, 1, 1);
 	m_lightDir = glm::vec3(0, 1, 0);
@@ -85,12 +84,8 @@ void FBX_Loader::Draw(Camera* pCamera)
 	int loc = glGetUniformLocation(m_programID, "ProjectionView");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &(pCamera->GetProjectionView()[0][0]));
 	
-	glm::vec4 trans = glm::vec4(0, 100, 0, 0);
-	
-	//GLfloat* c = new GLfloat[4];
-
 	loc = glGetUniformLocation(m_programID, "myTransform");
-	glUniform4fv (loc, 1, glm::value_ptr(trans));
+	glUniform4fv (loc, 1, glm::value_ptr(m_position));
 
 	// set texture slot
 	glActiveTexture(GL_TEXTURE0);

@@ -20,21 +20,21 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	m_light = glm::vec3(1, 0, 0);
 	m_specPower = 1.0f;
 	m_lightColour = glm::vec3(1, 1, 1);
-	m_cameraSpeed = 200.0f;
+	m_cameraSpeed = 20.0f;
 
 	//Particles
 	//------------------------------------
-	m_lifespanMin	= 0.5f;
-	m_lifespanMax	= 1.0f;
-	m_velocityMin	= 10.0f;
-	m_velocityMax	= 20.0f;
-	m_startSize		= 1.0f;
-	m_endSize		= 2.0f;
+	m_lifespanMin	= 30.0f;
+	m_lifespanMax	= 40.0f;
+	m_SpeedMin		= 10.0f;
+	m_SpeedMax		= 20.0f;
+	m_startSize		= 0.5f;
+	m_endSize		= 0.5f;
 	
-	m_startColour	= glm::vec4 (1, 1, 0, 1);
-	m_endColour		= glm::vec4 (1, 0, 0, 1);
+	m_startColour	= glm::vec4 (0.5f, 1, 1, 1);
+	m_endColour		= glm::vec4 (0.5f, 1, 1, 1);
 
-	m_maxParticles = 5;
+	m_maxParticles = 10000;
 	//------------------------------------
 
 	TwInit(TW_OPENGL_CORE, nullptr);
@@ -80,11 +80,11 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	TW_TYPE_FLOAT, &m_endSize, "group=Particles");
 	
 	//Velocity min
-	TwAddVarRW(m_bar, "Velocity min",
-	TW_TYPE_FLOAT, &m_velocityMin, "group=Particles");
-	//Velocity max
-	TwAddVarRW(m_bar, "Velocity max",
-	TW_TYPE_FLOAT, &m_velocityMax, "group=Particles");
+	TwAddVarRW(m_bar, "Speed",
+	TW_TYPE_FLOAT, &m_SpeedMin, "group=Particles");
+	////Velocity max
+	//TwAddVarRW(m_bar, "Speed max",
+	//TW_TYPE_FLOAT, &m_SpeedMax, "group=Particles");
 	
 	//Lifespan min
 	TwAddVarRW(m_bar, "Lifespan min",

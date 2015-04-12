@@ -36,8 +36,8 @@ public:
 	float GetLifeSpanMin(){ return m_lifespanMin; }
 	float GetLifeSpanMax(){ return m_lifespanMax; }
 
-	float GetVelocityMin(){ return m_velocityMin; }
-	float GetVelocityMax(){ return m_velocityMax; }
+	float GetSpeedMin(){ return m_SpeedMin; }
+	float GetSpeedMax(){ return m_SpeedMax; }
 
 	float GetStartSize(){ return m_startSize; }
 	float GetEndSize(){ return m_endSize; }
@@ -89,8 +89,8 @@ private:
 
 	float m_lifespanMin;
 	float m_lifespanMax;
-	float m_velocityMin;
-	float m_velocityMax;
+	float m_SpeedMin;
+	float m_SpeedMax;
 	float m_startSize;
 	float m_endSize;
 	

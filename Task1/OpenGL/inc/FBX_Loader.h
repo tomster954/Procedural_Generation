@@ -12,11 +12,6 @@ class Camera;
 class FBXFile;
 class FBXMeshNode;
 
-struct s_Transform
-{
-	glm::vec4 trans;
-};
-
 class FBX_Loader
 {
 public:
@@ -34,6 +29,8 @@ public:
 	void SetLightColour(glm::vec3 _colour) { m_lightCol = _colour; }
 	void SetLightDir(glm::vec3 _lightDir) { m_lightDir = _lightDir; }
 	void SetSecPower(float _specPower) { m_specPow = _specPower; }
+
+	void SetPosition(glm::vec4 _pos){ m_position = _pos; }
 private:
 	FBXFile* m_fbx;
 	FBXMeshNode* m_mesh;
@@ -41,7 +38,7 @@ private:
 	glm::vec3 m_lightDir;
 	glm::vec3 m_lightCol;
 	
-	s_Transform* m_position;
+	glm::vec4 m_position;
 
 	float m_specPow;
 	float m_timer;

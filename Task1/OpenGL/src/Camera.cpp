@@ -17,7 +17,7 @@ Camera::Camera(GLFWwindow *_pWindow)
 
 	m_cameraSpeed = 200.0f;
 
-	m_worldTransform[3] = glm::vec4(100, 100, 300, 1);
+	m_worldTransform[3] = glm::vec4(0, 50, 50, 1);
 
 	m_view = glm::lookAt(m_worldTransform[3].xyz(), vec3(0), vec3(0,1,0));
 	m_projection = glm::perspective(glm::pi<float>() * 0.25f, 16/9.f, 0.1f, 10000.f);
