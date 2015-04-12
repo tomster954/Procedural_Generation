@@ -94,6 +94,8 @@ private:
 	float m_startSize;
 	float m_endSize;
 	
+	float m_terrainSeed;
+
 	glm::vec4 m_startColour;
 	glm::vec4 m_endColour;
 	//------------------------------------

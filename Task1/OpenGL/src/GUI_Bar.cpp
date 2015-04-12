@@ -22,6 +22,8 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	m_lightColour = glm::vec3(1, 1, 1);
 	m_cameraSpeed = 20.0f;
 
+	m_terrainSeed = 1234.5f;
+
 	//Particles
 	//------------------------------------
 	m_lifespanMin	= 30.0f;
@@ -49,7 +51,9 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 
 	m_bar = TwNewBar("my bar");
 
-	TwAddButton(m_bar, "Run", NULL, NULL, " label='Press 'R' to regenerate terrain' ");
+	TwAddButton(m_bar, "Run", NULL, NULL, " label='Press 'R' to regen terrain' ");
+	TwAddVarRW(m_bar, "Seed",
+		TW_TYPE_FLOAT, &m_terrainSeed, "group=Terrain");
 
 	TwAddVarRW(m_bar, "light colour",
 	TW_TYPE_COLOR3F, &m_lightColour[0], "group=Scene");
