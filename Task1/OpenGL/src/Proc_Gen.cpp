@@ -23,6 +23,7 @@ ProcGen::~ProcGen()
 
 void ProcGen::StartUp()
 {
+	m_seed = 100.0f;
 	GenerateGrid(m_rows, m_cols);
 	CreateShaders();
 	GenerateNoise();
@@ -143,7 +144,7 @@ void ProcGen::GenerateNoise()
 			{
 				float freq = powf(2, (float)o);
 				float perlin_sample =
-				glm::perlin(glm::vec3((float)x, (float)y, (float)glfwGetTime()) * scale * freq) * 0.5f + 0.5f;
+					glm::perlin(glm::vec3((float)x, (float)y, m_seed) * scale * freq) * 0.5f + 0.5f;
 				perlin_data[y * dims + x] += perlin_sample * amplitude;
 				amplitude *= persistence;
 			} 

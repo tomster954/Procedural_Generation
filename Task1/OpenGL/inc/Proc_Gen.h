@@ -29,6 +29,9 @@ public:
 	void GenerateGrid( unsigned int rows, unsigned int cols );
 	void CreateShaders();
 
+	void SetSeed(float _seed) { m_seed = _seed; }
+
+
 	void GenerateNoise();
 
 	void Update(float _dt);
@@ -54,6 +57,8 @@ private:
 	unsigned int m_dirtGrassTexture;
 	unsigned int m_waterTexture;
 	unsigned int m_snowTexture;
+
+	float m_seed;
 
 	GLFWwindow *m_pWindow;
 };

@@ -42,6 +42,8 @@ public:
 	float GetStartSize(){ return m_startSize; }
 	float GetEndSize(){ return m_endSize; }
 	
+	float GetTerrainSeed(){ return m_terrainSeed; }
+
 	unsigned int GetMaxParticles() { return m_maxParticles; }
 
 	glm::vec4 GetStartColour() { return m_startColour; }

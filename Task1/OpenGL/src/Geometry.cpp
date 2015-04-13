@@ -78,6 +78,7 @@ void Geometry::Update(float _dt)
 	m_other->Update(_dt);
 
 	m_terrain->Update(_dt);
+	m_terrain->SetSeed(m_myBar->GetTerrainSeed());
 
 	if (m_Camera != nullptr)
 		m_particleEmitter->Update(_dt, m_Camera->GetTransform());
