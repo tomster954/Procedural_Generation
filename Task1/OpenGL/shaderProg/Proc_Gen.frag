@@ -4,6 +4,9 @@ in vec4 vColour;
 out vec4 FragColor;
 
 in vec2 frag_texcoord;
+in vec4 frag_position;
+in vec3 frag_normal;
+
 out vec4 out_color;
 uniform sampler2D perlin_texture;
 uniform sampler2D rock_texture;
@@ -11,6 +14,13 @@ uniform sampler2D dirtGrass_texture;
 uniform sampler2D water_texture;
 uniform sampler2D snow_texture;
 
+uniform sampler2D diffuse;
+uniform vec3 LightDir = vec3(1, 1, 0);
+uniform vec3 LightColour = vec3(1, 1, 1);
+uniform vec3 CameraPos;
+uniform float SpecPow = 128;
+
+void CalulateLight();
 
 void main() 
 { 
@@ -60,6 +70,18 @@ void main()
 		out_color = texture(snow_texture, vec2(frag_texcoord.x * textureScale, frag_texcoord.y * textureScale)).rgba;
 		
 	out_color.a = 1;
+	
+	//CalulateLight();
+}
+
+void CalulateLight()
+{
+	float d = max(0, dot( normalize(frag_normal.xyz), normalize(LightDir) ) );
+	vec3 E = normalize( CameraPos - frag_position.xyz);
+	vec3 R = reflect( -LightDir, frag_normal.xyz );
+	float s = max( 0, dot( E, R ) );
+	s = pow( s, SpecPow );
+	out_color = texture(diffuse, frag_texcoord) * vec4(LightColour * d + LightColour * s, 1);
 }
 
 
@@ -73,13 +95,8 @@ void main()
 
 
 
-//if (height > 0.5f && height < 0.6f)
-	//	out_color = mix(texture(dirtGrass_texture, vec2(frag_texcoord.x * textureScale, frag_texcoord.y * textureScale)).rgba, texture(rock_texture, vec2(frag_texcoord.x * textureScale, frag_texcoord.y * textureScale)).rgba, (height - 0.5f) * 10);
-	
-	
-	//if (height < 0.7f && height > 0.5f)
-	//	out_color = texture(dirtGrass_texture1, frag_texcoord).rgba * vec4(1, 1, 1, 1);
-	//else if (height > 0.8f)
-	//	out_color = texture(rock_texture1, frag_texcoord).rgba * vec4(1, 1, 1, 1);
-	//else if (height < 0.8f && height > 0.7f)
-	//	out_color = mix(texture(dirtGrass_texture1, frag_texcoord).rgba, texture(rock_texture1, frag_texcoord).rgba, (height - 0.7) * 10);
+
+
+
+
+

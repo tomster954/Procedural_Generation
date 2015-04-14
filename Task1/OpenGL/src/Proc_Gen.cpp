@@ -13,6 +13,11 @@ ProcGen::ProcGen(unsigned int _rows, unsigned int _cols, GLFWwindow *_pWindow)
 	m_rows = _rows;
 	m_cols = _cols;
 
+	m_specPow = 128;
+
+	m_lightDir = glm::vec3(1, 1, 0);
+	m_lightCol = glm::vec3(1, 1, 1);
+
 	StartUp();
 }
 
@@ -74,10 +79,12 @@ void ProcGen::GenerateGrid( unsigned int rows, unsigned int cols )
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
-	
+	glEnableVertexAttribArray(3);
+
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ProcGenVertex), 0);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(ProcGenVertex), (void*)(sizeof(glm::vec4)));
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ProcGenVertex), (void*)(sizeof(glm::vec4) * 2 ));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(ProcGenVertex), (void*)(sizeof(glm::vec4) * 2 + sizeof(glm::vec2)));
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (rows - 1) * (cols - 1) * 6 *	sizeof(unsigned int), auiIndices, GL_STATIC_DRAW);
 
@@ -193,6 +200,25 @@ void ProcGen::Draw(Camera* _pCamera)
 	glUniform1i(loc, 4);
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, m_snowTexture);
+
+	//Light stuff
+		loc = glGetUniformLocation(m_programID, "diffuse");
+		glUniform1i(loc, 5);//???
+
+		unsigned int lightDirection = glGetUniformLocation(m_programID, "LightDir");
+		glUniform3f(lightDirection, m_lightDir.x, m_lightDir.y, m_lightDir.z);
+
+		//set light colour
+		unsigned int lightColour = glGetUniformLocation(m_programID, "LightColour");
+		glUniform3f(lightColour, m_lightCol.x, m_lightCol.y, m_lightCol.z);
+
+		unsigned int cameraPosLocation = glGetUniformLocation(m_programID, "CameraPos");
+		glm::vec3 camLocation = _pCamera->GetPosition();
+		glUniform3fv(cameraPosLocation, 1, glm::value_ptr(camLocation));
+
+		//set specpower
+		unsigned int specPower = glGetUniformLocation(m_programID, "SpecPow");
+		glUniform1f(specPower, m_specPow);
 
 	glBindVertexArray(m_VAO);
 

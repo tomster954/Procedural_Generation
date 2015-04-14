@@ -17,6 +17,7 @@ struct ProcGenVertex
 	glm::vec4 position;
 	glm::vec4 colour;
 	glm::vec2 texcoord;
+	glm::vec3 normal;
 };
 
 class ProcGen
@@ -59,6 +60,11 @@ private:
 	unsigned int m_snowTexture;
 
 	float m_seed;
+
+	float m_specPow;
+
+	glm::vec3 m_lightDir;
+	glm::vec3 m_lightCol;
 
 	GLFWwindow *m_pWindow;
 };
