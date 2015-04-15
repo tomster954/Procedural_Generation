@@ -24,12 +24,14 @@ public:
 	void Draw();
 
 
-	glm::vec3 GetLightDir()	{ return -m_light; };
-	glm::vec3 GetLightCol() { return m_lightColour; }
+	glm::vec3 GetLightDir(){ return -m_light; };
+	glm::vec3 GetLightCol(){ return m_lightColour; }
 
 	float GetSpecPower(){ return m_specPower; }
 
 	float GetCameraSpeed(){ return m_cameraSpeed; }
+
+	glm::vec3 GetAmbientColour(){ return m_ambientColour; }
 
 	//Particle getters
 	//------------------------------------
@@ -41,15 +43,18 @@ public:
 
 	float GetStartSize(){ return m_startSize; }
 	float GetEndSize(){ return m_endSize; }
-	
+
+	unsigned int GetMaxParticles(){ return m_maxParticles; }
+
+	glm::vec4 GetStartColour(){ return m_startColour; }
+	glm::vec4 GetEndColour(){ return m_endColour; }
+	//------------------------------------
+
+	//Terrain getters
+	//------------------------------------
 	float GetTerrainSeed(){ return m_terrainSeed; }
-
-	glm::vec3 GetAmbientColour() { return m_ambientColour; }
-
-	unsigned int GetMaxParticles() { return m_maxParticles; }
-
-	glm::vec4 GetStartColour() { return m_startColour; }
-	glm::vec4 GetEndColour() { return m_endColour; }
+	float GetAmplitude(){ return m_amplitude; }
+	float GetPersistence(){ return m_persistence; }
 	//------------------------------------
 
 	static void OnMouseButton(GLFWwindow*, int b, int a, int m) 
@@ -101,6 +106,8 @@ private:
 	glm::vec3 m_ambientColour;
 
 	float m_terrainSeed;
+	float m_amplitude;
+	float m_persistence;
 
 	glm::vec4 m_startColour;
 	glm::vec4 m_endColour;

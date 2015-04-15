@@ -16,8 +16,11 @@ GUI_Bar::~GUI_Bar()
 
 void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 {
+	m_amplitude = 1.f;
+	m_persistence = 0.2f;
+
 	m_clearColour = glm::vec4(1, 1, 1, 1);
-	m_light = glm::vec3(1, 0, 0);
+	m_light = glm::vec3(1, 1, 0);
 	m_specPower = 1.0f;
 	m_lightColour = glm::vec3(1, 1, 1);
 	m_cameraSpeed = 20.0f;
@@ -54,20 +57,30 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	m_bar = TwNewBar("my bar");
 
 	TwAddButton(m_bar, "Run", NULL, NULL, " label='Press 'R' to regen terrain' ");
-	TwAddVarRW(m_bar, "Seed",
-		TW_TYPE_FLOAT, &m_terrainSeed, "group=Terrain");
+	
+	//Group : Terrain
+	//------------------------------------
+		TwAddVarRW(m_bar, "Seed", TW_TYPE_FLOAT, &m_terrainSeed, "group=Terrain");
 
-	TwAddVarRW(m_bar, "light colour",
-	TW_TYPE_COLOR3F, &m_lightColour[0], "group=Scene");
+		TwAddVarRW(m_bar, "Amplitude", TW_TYPE_FLOAT, &m_amplitude, "group=Terrain");
 
-	TwAddVarRW(m_bar, "Ambient Light",
-	TW_TYPE_COLOR3F, &m_ambientColour[0], "group=Scene");
+		TwAddVarRW(m_bar, "Persistence", TW_TYPE_FLOAT, &m_persistence, "group=Terrain");
+	//------------------------------------
 
-	TwAddVarRW(m_bar, "light direction",
-	TW_TYPE_DIR3F, &m_light[0], "group=Scene");
+	//Group : Scene
+	//------------------------------------
+		TwAddVarRW(m_bar, "light colour",
+		TW_TYPE_COLOR3F, &m_lightColour[0], "group=Scene");
 
-	TwAddVarRW(m_bar, "Specular Power",
-	TW_TYPE_FLOAT, &m_specPower, "group=Scene");
+		TwAddVarRW(m_bar, "Ambient Light",
+		TW_TYPE_COLOR3F, &m_ambientColour[0], "group=Scene");
+
+		TwAddVarRW(m_bar, "light direction",
+		TW_TYPE_DIR3F, &m_light[0], "group=Scene");
+
+		TwAddVarRW(m_bar, "Specular Power",
+		TW_TYPE_FLOAT, &m_specPower, "group=Scene");
+	//------------------------------------
 
 	TwAddVarRW(m_bar, "Camera Speed",
 	TW_TYPE_FLOAT, &m_cameraSpeed, "group=Camera");

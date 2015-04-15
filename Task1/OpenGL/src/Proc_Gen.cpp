@@ -13,10 +13,15 @@ ProcGen::ProcGen(unsigned int _rows, unsigned int _cols, GLFWwindow *_pWindow)
 	m_rows = _rows;
 	m_cols = _cols;
 
+	m_seed = 100.0f;
+
 	m_specPow = 128;
 
 	m_lightDir = glm::vec3(1, 1, 0);
 	m_lightCol = glm::vec3(1, 1, 1);
+
+	m_amplitude = 1.0f;
+	m_persistence = 0.2f;
 
 	StartUp();
 }
@@ -28,7 +33,6 @@ ProcGen::~ProcGen()
 
 void ProcGen::StartUp()
 {
-	m_seed = 100.0f;
 	GenerateGrid(m_rows, m_cols);
 	CreateShaders();
 	GenerateNoise();
@@ -147,16 +151,18 @@ void ProcGen::GenerateNoise()
 	{
 		for ( int y = 0 ; y < dims; ++y)
 		{
-			float amplitude = 1.f;
-			float persistence = 0.2f;
+			
+			m_amplitudeCurr = m_amplitude;
+			m_persistenceCurr = m_persistence;
+
 			perlin_data[y * dims + x] = 0;
 			
 			for (int o = 0; o < octaves; ++o)
 			{
 				float freq = powf(2, (float)o);
 				float perlin_sample = glm::perlin(glm::vec3((float)x, (float)y, m_seed) * scale * freq) * 0.5f + 0.5f;
-				perlin_data[y * dims + x] += perlin_sample * amplitude;
-				amplitude *= persistence;
+				perlin_data[y * dims + x] += perlin_sample * m_amplitudeCurr;
+				m_amplitudeCurr *= m_persistenceCurr;
 			} 
 		}
 	}

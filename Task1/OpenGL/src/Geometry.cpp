@@ -186,5 +186,8 @@ void Geometry::DrawTerrain(Camera *_pCamera)
 	m_terrain->SetLightDirection(m_myBar->GetLightDir());
 	m_terrain->SetLightColour(m_myBar->GetLightCol());
 
-	m_terrain->SetAmbientColour(m_myBar->GetAmbientColour());
+	m_terrain->SetAmbientColour(m_myBar->GetAmbientColour());\
+
+	m_terrain->SetAmplitude(m_myBar->GetAmplitude());
+	m_terrain->SetPersistence(m_myBar->GetPersistence());
 }

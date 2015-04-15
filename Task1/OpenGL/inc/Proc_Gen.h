@@ -43,6 +43,9 @@ public:
 	void SetLightColour( glm::vec3 _lightCol ) { m_lightCol = _lightCol; }
 	void SetAmbientColour( glm:: vec3 _ambientColour) {m_ambientColour = _ambientColour; }
 
+	void SetPersistence( float _persistence ) { m_persistence = _persistence; }
+	void SetAmplitude( float _amplitude ) { m_amplitude = _amplitude; }
+
 private:
 	// our vertex and index buffers
 	unsigned int m_rows;
@@ -66,6 +69,12 @@ private:
 	float m_seed;
 
 	float m_specPow;
+
+	float m_amplitudeCurr;
+	float m_persistenceCurr;
+
+	float m_amplitude;
+	float m_persistence;
 
 	glm::vec3 m_lightDir;
 	glm::vec3 m_lightCol;
