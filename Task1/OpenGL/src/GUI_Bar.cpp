@@ -36,6 +36,8 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 	m_startColour	= glm::vec4 (0.5f, 1, 1, 1);
 	m_endColour		= glm::vec4 (0.5f, 1, 1, 1);
 
+	m_ambientColour	= glm::vec3 (0.25, 0.25, 0.25);
+
 	m_maxParticles = 10000;
 	//------------------------------------
 
@@ -57,6 +59,9 @@ void GUI_Bar::StartUp(GLFWwindow *_pWindow)
 
 	TwAddVarRW(m_bar, "light colour",
 	TW_TYPE_COLOR3F, &m_lightColour[0], "group=Scene");
+
+	TwAddVarRW(m_bar, "Ambient Light",
+	TW_TYPE_COLOR3F, &m_ambientColour[0], "group=Scene");
 
 	TwAddVarRW(m_bar, "light direction",
 	TW_TYPE_DIR3F, &m_light[0], "group=Scene");

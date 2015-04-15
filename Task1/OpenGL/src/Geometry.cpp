@@ -78,7 +78,6 @@ void Geometry::Update(float _dt)
 	m_other->Update(_dt);
 
 	m_terrain->Update(_dt);
-	m_terrain->SetSeed(m_myBar->GetTerrainSeed());
 
 	if (m_Camera != nullptr)
 		m_particleEmitter->Update(_dt, m_Camera->GetTransform());
@@ -160,6 +159,7 @@ void Geometry::DrawFBXModles(Camera *_pCamera)
 	//Drawing the pyro
 	//---------------------------------
 		m_Pyro->Draw(m_Camera);
+		
 		m_Pyro->SetLightDir(m_myBar->GetLightDir());
 		m_Pyro->SetLightColour(m_myBar->GetLightCol());
 		m_Pyro->SetSecPower(m_myBar->GetSpecPower());
@@ -168,6 +168,7 @@ void Geometry::DrawFBXModles(Camera *_pCamera)
 	//Drawing the pyro
 	//---------------------------------
 		m_other->Draw(m_Camera);
+
 		m_other->SetLightDir(m_myBar->GetLightDir());
 		m_other->SetLightColour(m_myBar->GetLightCol());
 		m_other->SetSecPower(m_myBar->GetSpecPower());
@@ -178,4 +179,12 @@ void Geometry::DrawFBXModles(Camera *_pCamera)
 void Geometry::DrawTerrain(Camera *_pCamera)
 {
 	m_terrain->Draw(_pCamera);
+
+	m_terrain->SetSeed(m_myBar->GetTerrainSeed());
+
+	m_terrain->SetSpecularPower(m_myBar->GetSpecPower());
+	m_terrain->SetLightDirection(m_myBar->GetLightDir());
+	m_terrain->SetLightColour(m_myBar->GetLightCol());
+
+	m_terrain->SetAmbientColour(m_myBar->GetAmbientColour());
 }

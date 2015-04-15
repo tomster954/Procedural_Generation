@@ -6,7 +6,7 @@ layout(location=2) in vec2 texcoord;
 layout(location=3) in vec3 normal;
 
 out vec4 vColour;
-out vec2 frag_texcoord;
+out vec2 frag_texcoord; //UV
 out vec4 frag_position;
 out vec3 frag_normal;
 
@@ -18,7 +18,6 @@ void main()
 { 
 	float scale = 100.0f;
 	float waterLevel = 0.4f;
-	
 	
 	vec4 pos = position;
 	
@@ -33,8 +32,9 @@ void main()
 	//Moves the middle of the map to 0, y, 0
 	pos = pos + vec4(-150, 0, -150, 0);
 	
+	vColour = vec4(1,1,1,1);
 	frag_texcoord = texcoord;
-	frag_position = position;
+	frag_position = pos;
 	frag_normal = normal;
 	
 	gl_Position = ProjectionView * pos; 

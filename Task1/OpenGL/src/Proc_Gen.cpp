@@ -103,10 +103,13 @@ void ProcGen::CreateShaders()
 
 	unsigned int vertexShader = LoadShaderProgram(GL_VERTEX_SHADER,		"./shaderProg/Proc_Gen.vert");
 	unsigned int fragmentShader = LoadShaderProgram(GL_FRAGMENT_SHADER,	"./shaderProg/Proc_Gen.frag");
+	//unsigned int geometryShader = LoadShaderProgram(GL_GEOMETRY_SHADER, "./shaderProg/Proc_Gen.geom");
 
 	m_programID = glCreateProgram();
 	glAttachShader(m_programID, vertexShader);
 	glAttachShader(m_programID, fragmentShader);
+	//glAttachShader(m_programID, geometryShader);
+
 	glLinkProgram(m_programID);
 	glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
 	if (success == GL_FALSE) 
@@ -122,6 +125,7 @@ void ProcGen::CreateShaders()
 
 	glDeleteShader(fragmentShader);
 	glDeleteShader(vertexShader);
+	//glDeleteShader(geometryShader);
 }
 
 void ProcGen::Update(float _dt)
@@ -144,14 +148,13 @@ void ProcGen::GenerateNoise()
 		for ( int y = 0 ; y < dims; ++y)
 		{
 			float amplitude = 1.f;
-			float persistence = 0.3f;
+			float persistence = 0.2f;
 			perlin_data[y * dims + x] = 0;
 			
 			for (int o = 0; o < octaves; ++o)
 			{
 				float freq = powf(2, (float)o);
-				float perlin_sample =
-					glm::perlin(glm::vec3((float)x, (float)y, m_seed) * scale * freq) * 0.5f + 0.5f;
+				float perlin_sample = glm::perlin(glm::vec3((float)x, (float)y, m_seed) * scale * freq) * 0.5f + 0.5f;
 				perlin_data[y * dims + x] += perlin_sample * amplitude;
 				amplitude *= persistence;
 			} 
@@ -212,9 +215,13 @@ void ProcGen::Draw(Camera* _pCamera)
 		unsigned int lightColour = glGetUniformLocation(m_programID, "LightColour");
 		glUniform3f(lightColour, m_lightCol.x, m_lightCol.y, m_lightCol.z);
 
+		//Put it thar plz
+		unsigned int ambientLight = glGetUniformLocation(m_programID, "AmbientColour");
+		glUniform3f(ambientLight, m_ambientColour.x, m_ambientColour.y, m_ambientColour.z);
+
 		unsigned int cameraPosLocation = glGetUniformLocation(m_programID, "CameraPos");
 		glm::vec3 camLocation = _pCamera->GetPosition();
-		glUniform3fv(cameraPosLocation, 1, glm::value_ptr(camLocation));
+		glUniform3f(cameraPosLocation, camLocation.x, camLocation.y, camLocation.z);
 
 		//set specpower
 		unsigned int specPower = glGetUniformLocation(m_programID, "SpecPow");

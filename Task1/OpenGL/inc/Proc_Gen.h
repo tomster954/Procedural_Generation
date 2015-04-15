@@ -29,10 +29,7 @@ public:
 	void StartUp();
 	void GenerateGrid( unsigned int rows, unsigned int cols );
 	void CreateShaders();
-
-	void SetSeed(float _seed) { m_seed = _seed; }
-
-
+	
 	void GenerateNoise();
 
 	void Update(float _dt);
@@ -40,6 +37,11 @@ public:
 
 	void LoadTextures();
 
+	void SetSeed(float _seed) { m_seed = _seed; }
+	void SetSpecularPower(float _specPow) { m_specPow = _specPow; }
+	void SetLightDirection( glm::vec3 _lightDir ) { m_lightDir = -_lightDir; }
+	void SetLightColour( glm::vec3 _lightCol ) { m_lightCol = _lightCol; }
+	void SetAmbientColour( glm:: vec3 _ambientColour) {m_ambientColour = _ambientColour; }
 
 private:
 	// our vertex and index buffers
@@ -58,6 +60,8 @@ private:
 	unsigned int m_dirtGrassTexture;
 	unsigned int m_waterTexture;
 	unsigned int m_snowTexture;
+
+	glm::vec3 m_ambientColour;
 
 	float m_seed;
 

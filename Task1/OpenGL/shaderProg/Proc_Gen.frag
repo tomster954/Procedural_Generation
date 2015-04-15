@@ -1,7 +1,6 @@
 #version 410
 
 in vec4 vColour;
-out vec4 FragColor;
 
 in vec2 frag_texcoord;
 in vec4 frag_position;
@@ -17,6 +16,7 @@ uniform sampler2D snow_texture;
 uniform sampler2D diffuse;
 uniform vec3 LightDir = vec3(1, 1, 0);
 uniform vec3 LightColour = vec3(1, 1, 1);
+uniform vec3 AmbientColour = vec3(0.25, 0.25, 0.25);
 uniform vec3 CameraPos;
 uniform float SpecPow = 128;
 
@@ -71,7 +71,7 @@ void main()
 		
 	out_color.a = 1;
 	
-	//CalulateLight();
+	CalulateLight();
 }
 
 void CalulateLight()
@@ -81,7 +81,7 @@ void CalulateLight()
 	vec3 R = reflect( -LightDir, frag_normal.xyz );
 	float s = max( 0, dot( E, R ) );
 	s = pow( s, SpecPow );
-	out_color = texture(diffuse, frag_texcoord) * vec4(LightColour * d + LightColour * s, 1);
+	out_color *= vec4(LightColour * d + LightColour * s, 1) + vec4(AmbientColour, 1);
 }
 
 
